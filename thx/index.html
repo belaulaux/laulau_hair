@@ -345,9 +345,20 @@ const ACTIVE_PU_TYPES = Object.keys(POWERUP_TYPES).filter(
 const COLS=22, ROWS=18;
 let CELL, canvas, ctx;
 function sizeCanvas(){
-  const mob=innerWidth<600, pad=mob?20:40, hudH=mob?190:170;
-  CELL=Math.max(20,Math.floor(Math.min((innerWidth-pad)/COLS,(innerHeight-hudH)/ROWS)));
-  canvas.width=COLS*CELL; canvas.height=ROWS*CELL;
+  const mob = innerWidth < 600;
+  const pad = mob ? 18 : 40;
+  const hudH = mob ? 240 : 170;
+
+  const maxCellByWidth  = (innerWidth - pad) / COLS;
+  const maxCellByHeight = (innerHeight - hudH) / ROWS;
+
+  CELL = Math.floor(Math.min(maxCellByWidth, maxCellByHeight));
+
+  // Op mobiel liever iets kleinere vakjes dan een afgesneden speelveld
+  CELL = Math.max(14, CELL);
+
+  canvas.width = COLS * CELL;
+  canvas.height = ROWS * CELL;
 }
 
 // ─── COLOURS ──────────────────────────────────────────────────────────────────
