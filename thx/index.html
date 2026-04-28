@@ -103,10 +103,21 @@
     .wl.eaten{background:var(--m);border-color:var(--m);color:#fff}
     .wl.nxt{border-color:var(--mp);background:rgba(107,61,85,.11);box-shadow:0 0 0 2px var(--mp)}
 
-    /* canvas */
-    .cwrap{border-radius:14px;overflow:hidden;box-shadow:0 8px 40px rgba(61,31,48,.22);
-      flex-shrink:0;position:relative}
-    #gc{display:block}
+/* canvas */
+.cwrap{
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 8px 40px rgba(61,31,48,.22);
+  flex-shrink:0;
+  position:relative;
+  display:flex;
+  justify-content:center;
+  max-width:100%;
+}
+
+#gc{
+  display:block;
+}
 
     /* level-up overlay */
     .luov{position:absolute;inset:0;display:flex;flex-direction:column;
@@ -346,21 +357,23 @@ const COLS=22, ROWS=18;
 let CELL, canvas, ctx;
 function sizeCanvas(){
   const mob = innerWidth < 600;
-  const pad = mob ? 18 : 40;
-  const hudH = mob ? 240 : 170;
 
-  const maxCellByWidth  = (innerWidth - pad) / COLS;
-  const maxCellByHeight = (innerHeight - hudH) / ROWS;
+  const pad = mob ? 24 : 40;
+  const hudH = mob ? 260 : 170;
 
-  CELL = Math.floor(Math.min(maxCellByWidth, maxCellByHeight));
+  let cellByWidth  = (innerWidth - pad) / COLS;
+  let cellByHeight = (innerHeight - hudH) / ROWS;
 
-  // Op mobiel liever iets kleinere vakjes dan een afgesneden speelveld
-  CELL = Math.max(14, CELL);
+  CELL = Math.floor(Math.min(cellByWidth, cellByHeight));
 
-  canvas.width = COLS * CELL;
+  // extra safety marge tegen afrondingsfouten
+  CELL = CELL - 1;
+
+  CELL = Math.max(12, CELL);
+
+  canvas.width  = COLS * CELL;
   canvas.height = ROWS * CELL;
 }
-
 // ─── COLOURS ──────────────────────────────────────────────────────────────────
 const C={
   bg1: CONFIG.kleuren.achtergrondLinks,
