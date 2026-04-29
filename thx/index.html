@@ -238,6 +238,7 @@ The letters guide you.</p>
 </div>
 
 <script>
+const IS_MOBILE = window.innerWidth < 600;
 // ╔══════════════════════════════════════════════════════════════════════════════╗
 // ║  CONFIGURATIE — hier kun je alles aanpassen zonder de rest aan te raken     ║
 // ╚══════════════════════════════════════════════════════════════════════════════╝
@@ -310,12 +311,12 @@ slangStaart:        '#bfa0ad',
   // ── Power-ups ──────────────────────────────────────────────────────────────
   // dur = aantal ticks dat het effect duurt (1 tick ≈ 90-150ms afhankelijk van level)
   powerups: {
-    spawntussenruimte: 2,   // na hoeveel namen een power-up verschijnt
+    spawntussenruimte: IS_MOBILE ? 1 : 2,   // na hoeveel namen een power-up verschijnt
     verdwijntNaTicks:  110, // hoe lang een power-up op het bord blijft
     soorten: {
-      hart:  { icon:'♡',  naam:'Walls give way',   dur:80,  aan:true },
-      bout:  { icon:'~', naam:'Speed up, slow down',         dur:60,  aan:true },
-      oog:   { icon:'◦',  naam:'Under scrutiny',  dur:70,  aan:true },
+hart: { icon:'♡', naam:'Walls give way',      dur: IS_MOBILE ? 110 : 80, aan:true },
+bout: { icon:'~', naam:'Speed up, slow down', dur: IS_MOBILE ? 90  : 60, aan:true },
+oog:  { icon:'◦', naam:'Under scrutiny',      dur: IS_MOBILE ? 100 : 70, aan:true },
     },
   },
 
@@ -323,14 +324,14 @@ slangStaart:        '#bfa0ad',
   // Na hoeveel gegeten namen gaat het level omhoog?
   // [0, 5, 10, 16, ...] = level 1 start bij 0, level 2 bij 5 namen, etc.
   levelDrempels: [0, 5, 10, 16, 22, 29],
-  niveaus: [
-    { ms:155, extra:0, wander:0,  lbl:'Phase 1', sub:'At first' },
-    { ms:130, extra:0, wander:0,  lbl:'Phase 2', sub:'A shift in pace' },
-    { ms:108, extra:2, wander:0,  lbl:'Phase 3', sub:'What comes into view' },
-    { ms: 90, extra:3, wander:18, lbl:'Phase 4', sub:'Not everything is seen' },
-    { ms: 75, extra:4, wander:12, lbl:'Phase 5', sub:'A pattern emerges' },
-    { ms: 70, extra:5, wander: 10, lbl:'Phase 6', sub:'It gathers speed' },
-  ],
+niveaus: [
+  { ms: IS_MOBILE ? 175 : 155, extra:0, wander:0,  lbl:'Phase 1', sub:'At first' },
+  { ms: IS_MOBILE ? 145 : 130, extra:0, wander:0,  lbl:'Phase 2', sub:'A shift in pace' },
+  { ms: IS_MOBILE ? 120 : 108, extra:2, wander:0,  lbl:'Phase 3', sub:'What comes into view' },
+  { ms: IS_MOBILE ? 102 : 90,  extra:3, wander:18, lbl:'Phase 4', sub:'Not everything is seen' },
+  { ms: IS_MOBILE ? 86  : 75,  extra:4, wander:12, lbl:'Phase 5', sub:'A pattern emerges' },
+  { ms: IS_MOBILE ? 78  : 70,  extra:5, wander:10, lbl:'Phase 6', sub:'It gathers speed' },
+],
 };
 // ╔══════════════════════════════════════════════════════════════════════════════╗
 // ║  EINDE CONFIGURATIE — hieronder hoef je niets aan te passen                 ║
@@ -857,7 +858,7 @@ document.addEventListener('touchstart',e=>{ts=e.touches[0];},{passive:true});
 document.addEventListener('touchend',e=>{
   if(!ts)return;
   const dx=e.changedTouches[0].clientX-ts.clientX,dy=e.changedTouches[0].clientY-ts.clientY;
-  if(Math.abs(dx)<15&&Math.abs(dy)<15)return;
+  if(Math.abs(dx)<10&&Math.abs(dy)<10)return;
   if(Math.abs(dx)>Math.abs(dy)){const d=dx>0?{x:1,y:0}:{x:-1,y:0};if(d.x!==-dir.x)nextDir=d;}
   else{const d=dy>0?{x:0,y:1}:{x:0,y:-1};if(d.y!==-dir.y)nextDir=d;}
   ts=null;
