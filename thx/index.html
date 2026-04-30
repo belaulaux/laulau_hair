@@ -359,17 +359,16 @@ let CELL, canvas, ctx;
 function sizeCanvas(){
   const mob = innerWidth < 600;
 
-  const pad = mob ? 18 : 40;
-  const hudH = mob ? 230 : 170;
+  const pad = mob ? 8 : 40;
+  const hudH = mob ? 220 : 170;
 
   let cellByWidth  = (innerWidth - pad) / COLS;
   let cellByHeight = (innerHeight - hudH) / ROWS;
 
   CELL = Math.floor(Math.min(cellByWidth, cellByHeight));
 
-  if (mob) CELL = CELL - 0.5;
-
-  CELL = Math.max(13, Math.floor(CELL));
+  if (mob) CELL = Math.max(14, CELL);
+  else CELL = Math.max(20, CELL);
 
   canvas.width  = COLS * CELL;
   canvas.height = ROWS * CELL;
