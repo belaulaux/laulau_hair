@@ -168,6 +168,16 @@
       border:1.5px solid var(--m);border-radius:100px;font-family:var(--fb);
       font-size:.84rem;cursor:pointer;transition:all 180ms}
     .btn-r:hover{background:var(--md);color:#fff;border-color:var(--md)}
+
+        @media(max-width:700px){.mctrl{display:grid}}
+    .dbtn{width:3.8rem;height:3.8rem;background:rgba(155,107,130,.14);
+      border:1.5px solid rgba(155,107,130,.32);border-radius:14px;
+      display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+      cursor:pointer;-webkit-tap-highlight-color:transparent;
+      transition:background 80ms,transform 60ms;user-select:none}
+    .dbtn:active,.dbtn.pressed{background:rgba(107,61,85,.3);transform:scale(.93)}
+    .dbtn.up{grid-column:2;grid-row:1}.dbtn.left{grid-column:1;grid-row:2}
+    .dbtn.down{grid-column:2;grid-row:2}.dbtn.right{grid-column:3;grid-row:2}
   </style>
 </head>
 <body>
@@ -871,16 +881,9 @@ function nextName(){
 
 // ─── END ──────────────────────────────────────────────────────────────────────
 function endDead(){
-  alive=false;clearInterval(loop);if(CONFIG.geluid.dood) playSFX('die');
-  document.getElementById('ov-names').textContent=eaten.length;
-  document.getElementById('ov-lv').textContent=lv+1;
-  setTimeout(()=>showScreen('over'),750);
-}
-function endDead(){
   alive=false;
   clearInterval(loop);
 
-  // bewaar huidige state
   pausedState = {
     snake: JSON.parse(JSON.stringify(snake)),
     dir: {...dir},
@@ -898,6 +901,19 @@ function endDead(){
   document.getElementById('ov-lv').textContent=lv+1;
 
   setTimeout(()=>showScreen('over'),400);
+}
+
+function endWin(){
+  alive=false;
+  clearInterval(loop);
+
+  const T=CONFIG.tekst;
+  document.querySelector('#screen-win .esub').innerHTML =
+    T.winSub
+      .replace('{names}', eaten.join(' · '))
+      .replace(/\n/g,'<br>');
+
+  showScreen('win');
 }
 
 // ─── SCREENS ──────────────────────────────────────────────────────────────────
