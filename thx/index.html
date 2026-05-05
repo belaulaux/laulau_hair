@@ -881,11 +881,11 @@ function giveRandomBonus(duration){
 
   alive = true;
 
-giveRandomBonus(60);
+showScreen('game');
+clearInterval(loop);
+loop = setInterval(tick, LEVELS[lv].ms);
 
-  showScreen('game');
-  clearInterval(loop);
-  loop = setInterval(tick, LEVELS[lv].ms);
+giveRandomBonus(60);
 
   updateHUD();
   updateWDisp();
@@ -916,12 +916,13 @@ function nextName(){
   previews = [];
 
   alive = true;
+showScreen('game');
+placeWord();
+
+clearInterval(loop);
+loop = setInterval(tick, LEVELS[lv].ms);
+
 giveRandomBonus(50);
-
-  showScreen('game');
-  placeWord();
-
-  clearInterval(loop);
   loop = setInterval(tick, LEVELS[lv].ms);
 
   updateHUD();
