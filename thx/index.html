@@ -53,22 +53,23 @@
     #screen-game{flex-direction:column;justify-content:center;padding:.65rem;gap:.45rem}
 
     /* HUD */
- .hud{
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
+.hud{
+  display:flex;
   align-items:center;
+  justify-content:space-between;
   width:100%;
   max-width:980px;
 }
 
 .pu-bar{
-  grid-column:1;
-  justify-self:start;
+  flex:1;
+  display:flex;
+  justify-content:flex-start;
 }
 
 .hud-name{
-  grid-column:2;
-  justify-self:center;
+  flex:1;
+  text-align:center;
   font-family:var(--fd);
   font-size:1rem;
   font-style:italic;
@@ -76,9 +77,9 @@
 }
 
 .hud-r{
-  grid-column:3;
-  justify-self:end;
+  flex:1;
   display:flex;
+  justify-content:flex-end;
   gap:1rem;
   align-items:center;
 }
