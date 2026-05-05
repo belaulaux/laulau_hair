@@ -193,7 +193,9 @@
     .mctrl{display:none;grid-template-columns:repeat(3,3.8rem);
       grid-template-rows:repeat(2,3.8rem);gap:.4rem;margin-top:.15rem}
     /* Show on touch devices OR always show as fallback for small screens */
-    @media(max-width:700px){.mctrl{display:grid}}
+ @media (hover:none) and (pointer:coarse){
+  .mctrl{display:grid}
+}
     .dbtn{width:3.8rem;height:3.8rem;background:rgba(155,107,130,.14);
       border:1.5px solid rgba(155,107,130,.32);border-radius:14px;
       display:flex;align-items:center;justify-content:center;font-size:1.4rem;
@@ -220,26 +222,24 @@
       font-size:.84rem;cursor:pointer;transition:all 180ms}
     .btn-r:hover{background:var(--md);color:#fff;border-color:var(--md)}
 
- @media(max-width:700px){
+@media(max-width:700px){
   .hud{
-    flex-direction:column;
-    align-items:center;
+    width:100%;
+    grid-template-columns:1fr;
+    justify-items:center;
     gap:.2rem;
   }
 
-  .pu-bar{
-    width:100%;
-    justify-content:center;
+  .pu-bar,
+  .hud-name,
+  .hud-r{
+    justify-self:center;
   }
 
   .hud-r{
     justify-content:center;
     gap:.6rem;
     flex-wrap:nowrap;
-  }
-
-  .hud-name{
-    text-align:center;
   }
 }
   </style>
@@ -434,7 +434,7 @@ const ACTIVE_PU_TYPES = Object.keys(POWERUP_TYPES).filter(
 const COLS=22, ROWS=18;
 let CELL, canvas, ctx;
 function sizeCanvas(){
-  const mob = innerWidth < 600;
+const mob = window.matchMedia('(hover:none) and (pointer:coarse)').matches;
 
   const pad = mob ? 8 : 40;
   const hudH = mob ? 220 : 170;
