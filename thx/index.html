@@ -53,36 +53,12 @@
     #screen-game{flex-direction:column;justify-content:center;padding:.65rem;gap:.45rem}
 
     /* HUD */
-.hud{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  width:100%;
-  max-width:980px;
-}
-
-.pu-bar{
-  flex:1;
-  display:flex;
-  justify-content:flex-start;
-}
-
-.hud-name{
-  flex:1;
-  text-align:center;
-  font-family:var(--fd);
-  font-size:1rem;
-  font-style:italic;
-  color:var(--md);
-}
-
-.hud-r{
-  flex:1;
-  display:flex;
-  justify-content:flex-end;
-  gap:1rem;
-  align-items:center;
-}
+    .hud{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:980px}
+    .hud-name{font-family:var(--fd);font-size:1rem;font-style:italic;color:var(--md)}
+    .hud-r{display:flex;gap:1rem;align-items:center}
+    .hstat{font-size:.68rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--m)}
+    .hstat span{display:block;font-family:var(--fd);font-size:1.1rem;font-weight:600;
+      letter-spacing:0;text-transform:none;color:var(--mp)}
 
     /* level badge */
     .lvlbadge{display:flex;align-items:center;gap:.35rem;padding:.18rem .65rem .18rem .45rem;
@@ -850,23 +826,7 @@ function playSFX(tp){
 }
 
 // ─── CONTINUE / NEXT ──────────────────────────────────────────────────────────
-function giveRandomBonus(duration){
-  const ids = ['heart','bolt','eye'];
-  const id = ids[Math.floor(Math.random()*ids.length)];
-  const t = POWERUP_TYPES[id];
-
-  puActive = { id, ticksLeft: duration };
-
-  if(id === 'bolt'){
-    clearInterval(loop);
-    loop = setInterval(tick, LEVELS[lv].ms * 1.9);
-  }
-
-  showPUAnnounce(t);
-  renderPUBar();
-}
-  
-  function continueGame(){
+function continueGame(){
   if(!pausedState) return;
 
   snake = pausedState.snake;
@@ -882,11 +842,11 @@ function giveRandomBonus(duration){
 
   alive = true;
 
-showScreen('game');
-clearInterval(loop);
-loop = setInterval(tick, LEVELS[lv].ms);
+  puActive = { id:'heart', ticksLeft: 60 };
 
-giveRandomBonus(60);
+  showScreen('game');
+  clearInterval(loop);
+  loop = setInterval(tick, LEVELS[lv].ms);
 
   updateHUD();
   updateWDisp();
@@ -917,13 +877,12 @@ function nextName(){
   previews = [];
 
   alive = true;
-showScreen('game');
-placeWord();
+  puActive = { id:'heart', ticksLeft: 40 };
 
-clearInterval(loop);
-loop = setInterval(tick, LEVELS[lv].ms);
+  showScreen('game');
+  placeWord();
 
-giveRandomBonus(50);
+  clearInterval(loop);
   loop = setInterval(tick, LEVELS[lv].ms);
 
   updateHUD();
