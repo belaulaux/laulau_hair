@@ -226,7 +226,9 @@ It lingers in names, moments, and those who stayed.</p>
     <div class="estat"><div class="estat-v" id="ov-names">0</div><div class="estat-l">Names</div></div>
     <div class="estat"><div class="estat-v" id="ov-lv">1</div><div class="estat-l">Phase</div></div>
   </div>
-  <button class="btn-r" id="btn-retry">Follow again</button>
+<button class="btn-r" id="btn-continue">Continue the line</button>
+<button class="btn-r" id="btn-next">On to the next name</button>
+<button class="btn-r" id="btn-restart">Follow from start</button>
 </div>
 
 <!-- WIN -->
@@ -276,14 +278,16 @@ besturing: 'Arrow keys or WASD · swipe on mobile',
 
     // Game-over scherm
  overKop:  'The line\n<em>paused.</em>',
-overSub:  'A line only breaks when it is not continued.',
-overKnop: 'Follow again',
+overSub:  'A line only breaks if it is not continued.',
+overContinueKnop: 'Continue the line',
+overNextKnop: 'On to the next name',
+overRestartKnop: 'Follow from start',
 
 
     // Winnend scherm
   winKop:   'The line\n<em>has come into its own.</em>',
 winSub: 'What was traced was gratitude, all along:\n{names}',
-winKnop:  'Follow again',
+winKnop: 'Follow from start',
   },
 
   // ── Geluiden aan/uit ───────────────────────────────────────────────────────
@@ -394,6 +398,7 @@ let snake,dir,nextDir,foods,previews,
     puActive,    // {type, ticksLeft}   — currently active power-up effect
     puNextAt,    // namesEaten count when next pu should appear
     animT=0;
+  let pausedState = null;
 
 function shuffle(a){
   const r=[...a];
@@ -796,6 +801,60 @@ function playSFX(tp){
     o.disconnect();
   }
 }
+
+// ─── CONTINUE / NEXT ──────────────────────────────────────────────────────────
+function continueGame(){
+  if(!pausedState) return;
+
+  snake = pausedState.snake;
+  dir = pausedState.dir;
+  nextDir = pausedState.nextDir;
+  foods = pausedState.foods;
+  previews = pausedState.previews;
+  wordIdx = pausedState.wordIdx;
+  letIdx = pausedState.letIdx;
+  eaten = pausedState.eaten;
+  score = pausedState.score;
+  lv = pausedState.lv;
+
+  alive = true;
+
+  puActive = { id:'heart', ticksLeft: 60 };
+
+  showScreen('game');
+  clearInterval(loop);
+  loop = setInterval(tick, LEVELS[lv].ms);
+
+  updateHUD();
+  updateWDisp();
+  renderDots();
+}
+
+function nextName(){
+  if(wordIdx < order.length){
+    eaten.push(order[wordIdx]);
+    wordIdx++;
+  }
+
+  letIdx = 0;
+  foods = [];
+  previews = [];
+
+  alive = true;
+
+  puActive = { id:'heart', ticksLeft: 40 };
+
+  showScreen('game');
+  placeWord();
+
+  clearInterval(loop);
+  loop = setInterval(tick, LEVELS[lv].ms);
+
+  updateHUD();
+  updateWDisp();
+  renderDots();
+}
+
 // ─── END ──────────────────────────────────────────────────────────────────────
 function endDead(){
   alive=false;clearInterval(loop);if(CONFIG.geluid.dood) playSFX('die');
@@ -803,17 +862,28 @@ function endDead(){
   document.getElementById('ov-lv').textContent=lv+1;
   setTimeout(()=>showScreen('over'),750);
 }
-function endWin(){
+function endDead(){
   alive=false;
   clearInterval(loop);
 
-  const T=CONFIG.tekst;
-  document.querySelector('#screen-win .esub').innerHTML =
-    T.winSub
-      .replace('{names}', eaten.join(' · '))
-      .replace(/\n/g,'<br>');
+  // bewaar huidige state
+  pausedState = {
+    snake: JSON.parse(JSON.stringify(snake)),
+    dir: {...dir},
+    nextDir: {...nextDir},
+    foods: JSON.parse(JSON.stringify(foods)),
+    previews: JSON.parse(JSON.stringify(previews)),
+    wordIdx,
+    letIdx,
+    eaten: [...eaten],
+    score,
+    lv
+  };
 
-  showScreen('win');
+  document.getElementById('ov-names').textContent=eaten.length;
+  document.getElementById('ov-lv').textContent=lv+1;
+
+  setTimeout(()=>showScreen('over'),400);
 }
 
 // ─── SCREENS ──────────────────────────────────────────────────────────────────
@@ -875,8 +945,10 @@ document.addEventListener('touchend',e=>{
 });
 
 document.getElementById('btn-start').addEventListener('click',startGame);
-document.getElementById('btn-retry').addEventListener('click',startGame);
 document.getElementById('btn-play-again').addEventListener('click',startGame);
+  document.getElementById('btn-continue').addEventListener('click', continueGame);
+document.getElementById('btn-next').addEventListener('click', nextName);
+document.getElementById('btn-restart').addEventListener('click', startGame);
 window.addEventListener('resize',()=>{if(started&&alive){sizeCanvas();draw();}});
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
@@ -894,7 +966,10 @@ canvas=document.getElementById('gc');ctx=canvas.getContext('2d');
   document.querySelector('.hint').textContent=T.besturing;
   document.querySelector('#screen-over .etitle').innerHTML=T.overKop.replace(/\n/g,'<br>');
   document.querySelector('#screen-over .esub').textContent=T.overSub;
-  document.getElementById('btn-retry').textContent=T.overKnop;
+document.getElementById('btn-continue').textContent=T.overContinueKnop;
+document.getElementById('btn-next').textContent=T.overNextKnop;
+document.getElementById('btn-restart').textContent=T.overRestartKnop;
+  document.getElementById('btn-play-again').textContent=T.winKnop;
   document.querySelector('#screen-win .etitle').innerHTML=T.winKop.replace(/\n/g,'<br>');
 document.querySelector('#screen-win .esub').textContent =
   T.winSub.replace('{names}', '');
