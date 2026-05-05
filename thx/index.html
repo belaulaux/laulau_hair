@@ -169,35 +169,28 @@
       font-size:.84rem;cursor:pointer;transition:all 180ms}
     .btn-r:hover{background:var(--md);color:#fff;border-color:var(--md)}
 
-    @media(max-width:700px){
+ @media(max-width:700px){
   .hud{
     flex-direction:column;
-    align-items:stretch;
+    align-items:center;
     gap:.2rem;
   }
 
+  .pu-bar{
+    width:100%;
+    justify-content:center;
+  }
+
   .hud-r{
-    order:1;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    justify-content:center;
+    gap:.6rem;
     flex-wrap:nowrap;
-    gap:.4rem;
   }
 
   .hud-name{
-    order:2;
     text-align:center;
   }
-
-  .pu-bar{
-    order:0;
-    display:flex;
-    justify-content:center;
-    width:100%;
-  }
 }
-
   </style>
 </head>
 <body>
@@ -215,11 +208,11 @@ It lingers in names, moments, and those who stayed.</p>
 
 <!-- GAME -->
 <div class="screen hidden" id="screen-game">
-  <div class="hud">
-    <div class="hud-name" id="hud-name">—</div>
-    <div class="hud-r">
-      <div class="pu-bar" id="pu-bar"></div>
-      <div class="lvlbadge">
+ <div class="hud">
+  <div class="pu-bar" id="pu-bar"></div>
+  <div class="hud-name" id="hud-name">—</div>
+  <div class="hud-r">
+    <div class="lvlbadge">
         <span class="lvlbadge-lbl">Phase</span>
         <span class="lvlbadge-num" id="hud-lv">1</span>
         <div class="ldots" id="ldots"></div>
