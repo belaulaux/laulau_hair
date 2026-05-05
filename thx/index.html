@@ -70,10 +70,6 @@
   justify-self:start;
 }
 
-.hud-name{
-  justify-self:center;
-  text-align:center;
-}
 
 .hud-r{
   justify-self:end;
@@ -222,7 +218,6 @@
   }
 
   .pu-bar,
-  .hud-name,
   .hud-r{
     justify-self:center;
   }
@@ -252,7 +247,6 @@ It lingers in names, moments, and those who stayed.</p>
 <div class="screen hidden" id="screen-game">
  <div class="hud">
   <div class="pu-bar" id="pu-bar"></div>
-  <div class="hud-name" id="hud-name">—</div>
   <div class="hud-r">
     <div class="lvlbadge">
         <span class="lvlbadge-lbl">Phase</span>
@@ -532,7 +526,6 @@ function trySpawnPU(){
 
 // ─── HUD ──────────────────────────────────────────────────────────────────────
 function updateHUD(){
-  document.getElementById('hud-name').textContent=wordIdx<order.length?order[wordIdx]:'✓';
   document.getElementById('hud-sc').textContent=eaten.length;
 document.getElementById('hud-rem').textContent=(order.length-wordIdx)+' names';
   document.getElementById('hud-lv').textContent=lv+1;
