@@ -326,6 +326,13 @@ namen: [
   'MARLIES','RENE','RENEE',
   'JERRY','♥LAURA♥'
 ],
+  vasteStartNamen: [
+  // '♥LAURA♥','JERRY', 'MAARTEN' 
+],
+
+extraEindNamen: [
+  // 'EXTRA'
+],
 
   // ── Teksten ────────────────────────────────────────────────────────────────
   tekst: {
@@ -488,7 +495,9 @@ function initGame(){
   eaten=[]; score=0; alive=true; started=true;
   wander=0; flashT=0; lv=0;
   puOnBoard=null; puActive=null; puNextAt=1; // first power-up after name 1
-  order=shuffle(ALL_NAMES);
+ const fixed = CONFIG.vasteStartNamen || [];
+const rest = ALL_NAMES.filter(n => !fixed.includes(n));
+order = [...fixed, ...shuffle(rest)];
   placeWord(); updateHUD(); updateWDisp(); renderDots(); renderPUBar();
 }
 
@@ -974,8 +983,13 @@ function endWin(skip=false){
 
   showScreen('win');
 
-  const namesForEnd =
-    skip ? CONFIG.namen : (eaten.length ? eaten : CONFIG.namen);
+const baseNames =
+  skip ? CONFIG.namen : (eaten.length ? eaten : CONFIG.namen);
+
+const namesForEnd = [
+  ...baseNames,
+  ...(CONFIG.extraEindNamen || [])
+];
 
   startNamesCanvas(namesForEnd);
 }
