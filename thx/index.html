@@ -1013,7 +1013,7 @@ function startNamesCanvas(names){
   const lineH = 26;
 
   const fontSize = 18;
-  const charW = 9.2;
+const charW = 10;
 
   const cols = Math.floor((W - marginX * 2) / charW);
 
@@ -1036,10 +1036,10 @@ function startNamesCanvas(names){
   function drawNames(){
     c.clearRect(0,0,W,H);
 
-    c.font = `italic ${fontSize}px "Cormorant Garamond", Georgia, serif`;
+ c.font = `italic 500 19px "Cormorant Garamond", Georgia, serif`;
     c.textBaseline = 'middle';
-    c.fillStyle = '#9b6b82';
-    c.globalAlpha = .9;
+  c.fillStyle = '#6b3d55';
+    c.globalAlpha = .95;
 
     const elapsed = performance.now() - start;
 
