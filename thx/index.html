@@ -498,15 +498,34 @@ function lvFor(n){
 
 function initGame(){
   snake=[{x:10,y:9},{x:9,y:9},{x:8,y:9}];
-  dir={x:1,y:0}; nextDir={x:1,y:0};
-  foods=[]; previews=[];
-  wordIdx=0; letIdx=0;
-  eaten=[]; score=0; alive=true; started=true;
-  wander=0; flashT=0; lv=0;
-  puOnBoard=null; puActive=null; puNextAt=1; // first power-up after name 1
- const fixed = CONFIG.vasteStartNamen || [];
-const rest = ALL_NAMES.filter(n => !fixed.includes(n));
-order = shuffle(ALL_NAMES);
+  dir={x:1,y:0}; 
+  nextDir={x:1,y:0};
+
+  foods=[]; 
+  previews=[];
+
+  wordIdx=0; 
+  letIdx=0;
+  eaten=[]; 
+  score=0; 
+  alive=true; 
+  started=true;
+
+  wander=0; 
+  flashT=0; 
+  lv=0;
+
+  puOnBoard=null; 
+  puActive=null; 
+  puNextAt=1;
+
+  order = shuffle(ALL_NAMES);
+
+  placeWord();
+  updateHUD();
+  updateWDisp();
+  renderDots();
+  renderPUBar();
 }
 
 // ─── PLACEMENT ────────────────────────────────────────────────────────────────
