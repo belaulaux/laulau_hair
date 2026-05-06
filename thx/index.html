@@ -209,20 +209,19 @@
       font-size:.84rem;cursor:pointer;transition:all 180ms}
     .btn-r:hover{background:var(--md);color:#fff;border-color:var(--md)}
 
-    #names-canvas{
-  width:min(82vw, 720px);
-  height:clamp(140px, 28vh, 230px);
+   #names-canvas{
+  width:min(72vw, 520px);
+  height:clamp(220px, 36vh, 360px); /* hoger dan eerst */
   display:block;
   margin:.2rem auto .3rem;
 }
 
 @media(max-width:700px){
-  .hud{
-    width:100%;
-    grid-template-columns:1fr;
-    justify-items:center;
-    gap:.2rem;
+  #names-canvas{
+    width:min(88vw, 420px);
+    height:clamp(260px, 46vh, 420px); /* nog hoger op mobiel */
   }
+}
 
   .pu-bar,
   .hud-r{
@@ -1050,7 +1049,7 @@ const charW = 10;
   function drawNames(){
     c.clearRect(0,0,W,H);
 
- c.font = `italic 500 19px "Cormorant Garamond", Georgia, serif`;
+c.font = `italic 600 19px "Cormorant Garamond", Georgia, serif`;
     c.textBaseline = 'middle';
   c.fillStyle = '#6b3d55';
     c.globalAlpha = .95;
@@ -1092,8 +1091,13 @@ function showScreen(n){
 }
 
 function startGame(){
-  initAudio();showScreen('game');sizeCanvas();initGame();
-  if(loop)clearInterval(loop);
+  initAudio();
+  showScreen('game');
+  sizeCanvas();
+  pausedState = null;
+  initGame();
+
+  if(loop) clearInterval(loop);
   loop=setInterval(tick,LEVELS[0].ms);
 }
 
