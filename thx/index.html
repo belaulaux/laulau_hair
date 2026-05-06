@@ -326,12 +326,12 @@ namen: [
   'MARLIES','RENE','RENEE',
   'JERRY','♥LAURA♥'
 ],
-  vasteStartNamen: [
-  // '♥LAURA♥','JERRY', 'MAARTEN' 
+vasteStartNamen: [
+  '♥LAURA♥','JERRY','MAARTEN'
 ],
 
 extraEindNamen: [
-  // 'EXTRA'
+  'EXTRA'
 ],
 
   // ── Teksten ────────────────────────────────────────────────────────────────
@@ -481,6 +481,16 @@ function shuffle(a){
   for(let i=r.length-1;i>0;i--){const j=0|Math.random()*(i+1);[r[i],r[j]]=[r[j],r[i]];}
   return r;
 }
+  function endNameOrder(){
+  const fixed = CONFIG.vasteStartNamen || [];
+  const rest = CONFIG.namen.filter(n => !fixed.includes(n));
+
+  return [
+    ...fixed,
+    ...shuffle(rest),
+    ...(CONFIG.extraEindNamen || [])
+  ];
+}
 function lvFor(n){
   let l=0;
   for(let i=0;i<LV_THRESH.length;i++) if(n>=LV_THRESH[i]) l=i;
@@ -497,8 +507,7 @@ function initGame(){
   puOnBoard=null; puActive=null; puNextAt=1; // first power-up after name 1
  const fixed = CONFIG.vasteStartNamen || [];
 const rest = ALL_NAMES.filter(n => !fixed.includes(n));
-order = [...fixed, ...shuffle(rest)];
-  placeWord(); updateHUD(); updateWDisp(); renderDots(); renderPUBar();
+order = shuffle(ALL_NAMES);
 }
 
 // ─── PLACEMENT ────────────────────────────────────────────────────────────────
@@ -983,22 +992,13 @@ function endWin(skip=false){
 
   showScreen('win');
 
-const baseNames =
-  skip ? CONFIG.namen : (eaten.length ? eaten : CONFIG.namen);
-
-const namesForEnd = [
-  ...baseNames,
-  ...(CONFIG.extraEindNamen || [])
-];
-
+const namesForEnd = endNameOrder();
   startNamesCanvas(namesForEnd);
 }
 
 function skipToNames(){
   alive=false;
   if(loop) clearInterval(loop);
-
-  eaten = [...CONFIG.namen];
 
   endWin(true);
 }
