@@ -209,6 +209,13 @@
       font-size:.84rem;cursor:pointer;transition:all 180ms}
     .btn-r:hover{background:var(--md);color:#fff;border-color:var(--md)}
 
+    #names-canvas{
+  width:min(82vw, 720px);
+  height:clamp(140px, 28vh, 230px);
+  display:block;
+  margin:.2rem auto .3rem;
+}
+
 @media(max-width:700px){
   .hud{
     width:100%;
@@ -287,13 +294,14 @@ It lingers in names, moments, and those who stayed.</p>
   </div>
 <button class="btn-r" id="btn-continue">Continue the line</button>
 <button class="btn-r" id="btn-next">On to the next name</button>
-<button class="btn-r" id="btn-restart">Follow from start</button>
+<button class="btn-r" id="btn-skip">Skip the line</button>
 </div>
 
 <!-- WIN -->
 <div class="screen hidden" id="screen-win">
   <p class="etitle">The line<br><em>has come into its own.</em></p>
   <p class="esub">What was traced was gratitude, all along.</p>
+  <canvas id="names-canvas"></canvas>
   <button class="btn-r" id="btn-play-again">Follow again</button>
 </div>
 
@@ -340,12 +348,12 @@ besturing: 'Arrow keys or WASD · swipe on mobile',
 overSub:  'A line only breaks if it is not continued.',
 overContinueKnop: 'Continue the line',
 overNextKnop: 'On to the next name',
-overRestartKnop: 'Follow from start',
+overSkipKnop: 'Skip the line',
 
 
     // Winnend scherm
   winKop:   'The line\n<em>has come into its own.</em>',
-winSub: 'What was traced was gratitude, all along:\n{names}',
+winSub: 'What was traced was gratitude, all along.',
 winKnop: 'Follow from start',
   },
 
@@ -953,19 +961,115 @@ function endDead(){
   setTimeout(()=>showScreen('over'),400);
 }
 
-function endWin(){
+function endWin(skip=false){
   alive=false;
   clearInterval(loop);
 
   const T=CONFIG.tekst;
+
   document.querySelector('#screen-win .esub').innerHTML =
     T.winSub
-      .replace('{names}', eaten.join(' · '))
+      .replace('{names}', '')
       .replace(/\n/g,'<br>');
 
   showScreen('win');
+
+  const namesForEnd =
+    skip ? CONFIG.namen : (eaten.length ? eaten : CONFIG.namen);
+
+  startNamesCanvas(namesForEnd);
 }
 
+function skipToNames(){
+  alive=false;
+  if(loop) clearInterval(loop);
+
+  eaten = [...CONFIG.namen];
+
+  endWin(true);
+}
+
+  let namesAnimId = null;
+
+function startNamesCanvas(names){
+  const cnv = document.getElementById('names-canvas');
+  const c = cnv.getContext('2d');
+
+  if(namesAnimId) cancelAnimationFrame(namesAnimId);
+
+  const ratio = window.devicePixelRatio || 1;
+  const rect = cnv.getBoundingClientRect();
+
+  cnv.width = Math.floor(rect.width * ratio);
+  cnv.height = Math.floor(rect.height * ratio);
+
+  c.setTransform(ratio,0,0,ratio,0,0);
+
+  const W = rect.width;
+  const H = rect.height;
+
+  const marginX = 12;
+  const startY = 22;
+  const lineH = 26;
+
+  const fontSize = 18;
+  const charW = 9.2;
+
+  const cols = Math.floor((W - marginX * 2) / charW);
+
+  const text = names.join(' · ');
+  const textChars = [...text];
+
+  const rows = Math.ceil(textChars.length / cols);
+  const loopSlots = rows * cols;
+
+  const buffer = [...textChars];
+
+  while(buffer.length < loopSlots){
+    buffer.push(' ');
+  }
+
+  let offset = 0;
+  let start = performance.now();
+  const speed = 0.015;
+
+  function drawNames(){
+    c.clearRect(0,0,W,H);
+
+    c.font = `italic ${fontSize}px "Cormorant Garamond", Georgia, serif`;
+    c.textBaseline = 'middle';
+    c.fillStyle = '#9b6b82';
+    c.globalAlpha = .9;
+
+    const elapsed = performance.now() - start;
+
+    if(elapsed > 2200){
+      offset += speed;
+    }
+
+    const whole = Math.floor(offset);
+    const frac = offset - whole;
+
+    for(let row = 0; row < rows; row++){
+      const y = startY + row * lineH;
+      if(y > H + lineH) continue;
+
+      for(let col = 0; col < cols; col++){
+        const slot = row * cols + col;
+        const charIndex = (slot + whole) % loopSlots;
+        const ch = buffer[charIndex];
+
+        const x = marginX + col * charW - frac * charW;
+
+        c.fillText(ch, x, y);
+      }
+    }
+
+    namesAnimId = requestAnimationFrame(drawNames);
+  }
+
+  drawNames();
+}
 // ─── SCREENS ──────────────────────────────────────────────────────────────────
 function showScreen(n){
   ['title','game','over','win'].forEach(s=>{
@@ -1028,7 +1132,7 @@ document.getElementById('btn-start').addEventListener('click',startGame);
 document.getElementById('btn-play-again').addEventListener('click',startGame);
   document.getElementById('btn-continue').addEventListener('click', continueGame);
 document.getElementById('btn-next').addEventListener('click', nextName);
-document.getElementById('btn-restart').addEventListener('click', startGame);
+document.getElementById('btn-skip').addEventListener('click', skipToNames);
 window.addEventListener('resize',()=>{if(started&&alive){sizeCanvas();draw();}});
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
@@ -1048,7 +1152,7 @@ canvas=document.getElementById('gc');ctx=canvas.getContext('2d');
   document.querySelector('#screen-over .esub').textContent=T.overSub;
 document.getElementById('btn-continue').textContent=T.overContinueKnop;
 document.getElementById('btn-next').textContent=T.overNextKnop;
-document.getElementById('btn-restart').textContent=T.overRestartKnop;
+document.getElementById('btn-skip').textContent=T.overSkipKnop;
   document.getElementById('btn-play-again').textContent=T.winKnop;
   document.querySelector('#screen-win .etitle').innerHTML=T.winKop.replace(/\n/g,'<br>');
 document.querySelector('#screen-win .esub').textContent =
