@@ -1027,6 +1027,10 @@ function skipToNames(){
 
   let namesAnimId = null;
 
+  function displayName(n){
+  return n === '♥LAURA♥' ? '♥ LAURA ♥' : n;
+}
+
 function startNamesCanvas(names){
   const cnv = document.getElementById('names-canvas');
   const c = cnv.getContext('2d');
@@ -1053,7 +1057,7 @@ const charW = 9.4;
 
   const cols = Math.floor((W - marginX * 2) / charW);
 
-  const text = names.join(' · ');
+const text = names.map(displayName).join(' · ');
   const textChars = [...text];
 
   const rows = Math.ceil(textChars.length / cols);
