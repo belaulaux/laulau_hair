@@ -910,7 +910,7 @@ function playSFX(tp){
 function continueGame(){
   if(!pausedState) return;
 
-  snake = pausedState.snake;
+  snake = pausedState.snake.slice(0,4);
   dir = pausedState.dir;
   nextDir = pausedState.nextDir;
   foods = pausedState.foods;
@@ -957,11 +957,15 @@ function nextName(){
   foods = [];
   previews = [];
 
-  alive = true;
-  puActive = { id:'heart', ticksLeft: 40 };
+alive = true;
+puActive = { id:'heart', ticksLeft: 40 };
 
-  showScreen('game');
-  placeWord();
+snake = [{x:10,y:9},{x:9,y:9},{x:8,y:9}];
+dir = {x:1,y:0};
+nextDir = {x:1,y:0};
+
+showScreen('game');
+placeWord();
 
   clearInterval(loop);
   loop = setInterval(tick, LEVELS[lv].ms);
