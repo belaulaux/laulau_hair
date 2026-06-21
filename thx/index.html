@@ -315,6 +315,7 @@ const CONFIG = {
   // Voeg namen toe of verwijder ze. Gebruik HOOFDLETTERS.
   // Namen worden elke ronde in willekeurige volgorde gespeeld.
 namen: [
+  'ACLA',
   'ROGIER','CINDY','LOUWINA','MATTHIJS',
   'KLAAS', 'EDI', 'ESTHER','FLOOR',
   'CHRIS','ILJA','NIENKE','INGE',
@@ -326,7 +327,7 @@ namen: [
   'JERRY','♥LAURA♥', 'DANIEL', 'DORIEN', 'CHANTAL'
 ],
 vasteStartNamen: [
-  '♥LAURA♥','JERRY','MAARTEN'
+  'ACLA','♥LAURA♥','JERRY','MAARTEN'
 ],
 
 extraEindNamen: [
@@ -480,13 +481,23 @@ function shuffle(a){
   for(let i=r.length-1;i>0;i--){const j=0|Math.random()*(i+1);[r[i],r[j]]=[r[j],r[i]];}
   return r;
 }
-  function endNameOrder(){
+function playNameOrder(){
   const fixed = CONFIG.vasteStartNamen || [];
   const rest = CONFIG.namen.filter(n => !fixed.includes(n));
 
   return [
     ...fixed,
-    ...shuffle(rest),
+    ...shuffle(rest)
+  ];
+}
+
+function endNameOrder(){
+  const gratitudeStart = ['♥LAURA♥','JERRY','MAARTEN','ACLA'];
+  const playedAfterStart = eaten.filter(n => !gratitudeStart.includes(n));
+
+  return [
+    ...gratitudeStart,
+    ...playedAfterStart,
     ...(CONFIG.extraEindNamen || [])
   ];
 }
@@ -519,7 +530,7 @@ function initGame(){
   puActive=null; 
   puNextAt=1;
 
-  order = shuffle(ALL_NAMES);
+  order = playNameOrder();
 
   placeWord();
   updateHUD();
