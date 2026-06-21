@@ -492,13 +492,23 @@ function playNameOrder(){
 }
 
 function endNameOrder(){
+  // Eindscherm: vaste dankvolgorde eerst, daarna de volledige rest
+  // in de random speelvolgorde, ook als sommige namen niet gespeeld zijn.
   const gratitudeStart = ['♥LAURA♥','JERRY','MAARTEN','ACLA'];
-  const playedAfterStart = eaten.filter(n => !gratitudeStart.includes(n));
+
+  // order bevat de volledige speelvolgorde van deze ronde:
+  // ACLA, ♥LAURA♥, JERRY, MAARTEN, daarna de random rest.
+  const restInGameOrder = order.filter(n => !gratitudeStart.includes(n));
+
+  // Extra eindnamen worden niet gespeeld, maar staan wel in de danklijst.
+  // Filter voorkomt dubbele namen als iemand per ongeluk ook al in CONFIG.namen staat.
+  const extraOnlyAtEnd = (CONFIG.extraEindNamen || [])
+    .filter(n => !gratitudeStart.includes(n) && !restInGameOrder.includes(n));
 
   return [
     ...gratitudeStart,
-    ...playedAfterStart,
-    ...(CONFIG.extraEindNamen || [])
+    ...restInGameOrder,
+    ...extraOnlyAtEnd
   ];
 }
 function lvFor(n){
