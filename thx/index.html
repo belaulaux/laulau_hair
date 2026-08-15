@@ -135,20 +135,20 @@
   border:1.5px solid;
   transition:opacity .3s;
 }
-    .pu-chip.heart  {background:rgba(220,80,100,.1); border-color:rgba(220,80,100,.35); color:#a02040}
+    .pu-chip.heart  {background:rgba(224,37,91,.1); border-color:rgba(224,37,91,.35); color:#a02040}
     .pu-chip.bolt   {background:rgba(200,150,10,.1);  border-color:rgba(200,150,10,.35);  color:#7a5500}
     .pu-chip.eye    {background:rgba(80,100,200,.1);  border-color:rgba(80,100,200,.35);  color:#1a3080}
     .pu-chip .pu-timer{
       width:36px;height:4px;border-radius:2px;background:rgba(0,0,0,.1);overflow:hidden
     }
     .pu-chip .pu-fill{height:100%;border-radius:2px;transition:width .1s linear}
-    .pu-chip.heart .pu-fill{background:#d04060}
+    .pu-chip.heart .pu-fill{background:#E0255B}
     .pu-chip.bolt  .pu-fill{background:#c09010}
     .pu-chip.eye   .pu-fill{background:#3050c0}
 
     /* word display */
     .wdisp{display:flex;gap:.32rem;align-items:center;justify-content:center;flex-wrap:wrap}
-    .wl{width:1.85rem;height:1.85rem;border:1.5px solid rgba(155,107,130,.28);
+    .wl{width:1.85rem;height:1.85rem;border:1.5px solid rgba(208,72,103,.28);
       border-radius:6px;display:flex;align-items:center;justify-content:center;
       font-family:var(--fd);font-size:1rem;font-weight:600;color:var(--md);
       background:rgba(255,255,255,.42);transition:all .2s}
@@ -180,7 +180,12 @@
     .lu-title{font-family:var(--fd);font-size:clamp(1.7rem,4vw,2.8rem);
       font-weight:600;color:var(--mp);line-height:1.1;text-align:center}
     .lu-title em{font-style:italic;color:var(--m)}
-    .lu-sub{font-size:.83rem;color:var(--md);margin-top:.45rem;text-align:center}
+  .lu-sub{
+  font-size:.83rem;
+  color:#6B3D55;
+  margin-top:.45rem;
+  text-align:center;
+}
 
     /* power-up announce overlay */
     .puov{position:absolute;inset:0;display:flex;flex-direction:column;
@@ -197,8 +202,8 @@
  @media (hover:none) and (pointer:coarse){
   .mctrl{display:grid}
 }
-    .dbtn{width:3.8rem;height:3.8rem;background:rgba(155,107,130,.14);
-      border:1.5px solid rgba(155,107,130,.32);border-radius:14px;
+    .dbtn{width:3.8rem;height:3.8rem;background:rgba(208,72,103,.14);
+      border:1.5px solid rgba(208,72,103,.32);border-radius:14px;
       display:flex;align-items:center;justify-content:center;font-size:1.4rem;
       cursor:pointer;-webkit-tap-highlight-color:transparent;
       transition:background 80ms,transform 60ms;user-select:none}
@@ -211,7 +216,12 @@
     .etitle{font-family:var(--fd);font-size:clamp(1.9rem,5vw,3.3rem);
       font-weight:600;color:var(--mp);line-height:1.1}
     .etitle em{font-style:italic;color:var(--m)}
-    .esub{font-size:.9rem;color:var(--md);line-height:1.75;max-width:36ch}
+    .esub{
+  font-size:.9rem;
+  color:#6B3D55;
+  line-height:1.75;
+  max-width:36ch;
+}
     .estats{display:flex;gap:1.8rem;justify-content:center;margin:.2rem 0}
     .estat{text-align:center}
     .estat-v{font-family:var(--fd);font-size:1.9rem;font-weight:600;color:var(--mp)}
@@ -470,13 +480,13 @@ document.documentElement.style.setProperty('--cell', CELL + 'px');
 const C={
   bg1: CONFIG.kleuren.achtergrondLinks,
   bg2: CONFIG.kleuren.achtergrondRechts,
-  grid:'rgba(155,107,130,.08)',
+  grid:'rgba(208,72,103,.08)',
   sh:  CONFIG.kleuren.slangKop,
   sb:  CONFIG.kleuren.slangLijf,
   st:  CONFIG.kleuren.slangStaart,
-  fb:'rgba(255,255,255,.55)',fbr:'rgba(155,107,130,.3)',
-  fn:'#3d1020',fnb:'rgba(255,255,255,.93)',fnbr:'#6b3d55',
-  fp:'rgba(155,107,130,.48)',fpb:'rgba(255,255,255,.22)',fpbr:'rgba(155,107,130,.18)',
+  fb:'rgba(255,255,255,.55)',fbr:'rgba(208,72,103,.3)',
+  fn:'#3D1F30',fnb:'rgba(255,255,255,.93)',fnbr:'#6b3d55',
+  fp:'rgba(208,72,103,.48)',fpb:'rgba(255,255,255,.22)',fpbr:'rgba(208,72,103,.18)',
 };
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
@@ -782,7 +792,7 @@ function draw(){
   // Heart wall-through aura on border
   if(puActive&&puActive.id==='heart'){
     const pulse=.5+.5*Math.sin(animT*4);
-    ctx.strokeStyle=`rgba(220,80,100,${.2+pulse*.3})`;
+    ctx.strokeStyle=`rgba(224,37,91,${.2+pulse*.3})`;
     ctx.lineWidth=4;
  ctx.strokeRect(2,2,canvas.width-4,canvas.height-4);
   }
@@ -813,7 +823,7 @@ function draw(){
     ctx.lineWidth=1.5;
     rr(px+rPad,py+rPad,CELL-rPad*2,CELL-rPad*2,CELL*.3+4); ctx.stroke();
     // glow bg
-    ctx.shadowColor='rgba(200,80,150,.18)'; ctx.shadowBlur=CELL*.35;
+    ctx.shadowColor='rgba(224,37,91,.18)'; ctx.shadowBlur=CELL*.35;
     const colors={heart:'rgba(255,220,230,.95)',bolt:'rgba(255,245,200,.95)',eye:'rgba(220,230,255,.95)'};
     ctx.fillStyle=colors[f.id]||'rgba(255,255,255,.9)';
     rr(px+CELL*.18,py+CELL*.18,CELL*.64,CELL*.64,CELL*.22); ctx.fill();
@@ -827,7 +837,7 @@ ctx.fillText(f.icon, px + CELL/2, py + CELL/2 + 1);
     // TTL fade hint
     const alpha=Math.min(1,puOnBoard.ttl/30);
     if(alpha<1){
-      ctx.strokeStyle=`rgba(200,80,150,${1-alpha})`;
+      ctx.strokeStyle=`rgba(224,37,91,${1-alpha})`;
       ctx.lineWidth=2;
       rr(px+CELL*.18,py+CELL*.18,CELL*.64,CELL*.64,CELL*.22); ctx.stroke();
     }
@@ -852,7 +862,7 @@ ctx.fillText(f.icon, px + CELL/2, py + CELL/2 + 1);
     ctx.shadowBlur=0; ctx.shadowColor='transparent';
     ctx.strokeStyle=isNext?C.fnbr:C.fbr; ctx.lineWidth=isNext?2:1;
     rr(px+pad,py+pad,CELL-pad*2,CELL-pad*2,r); ctx.stroke();
-    ctx.fillStyle=isNext?C.fn:'#5a2d47';
+    ctx.fillStyle=isNext?C.fn:'#6B3D55';
     ctx.font=`${isNext?700:500} ${0|CELL*(isNext?.72:.60)}px "Cormorant Garamond",Georgia,serif`;
     ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillText(f.letter,px+CELL/2,py+CELL/2+1);
