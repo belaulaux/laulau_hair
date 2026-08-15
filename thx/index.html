@@ -12,10 +12,18 @@
     :root{
       --fd:'Cormorant Garamond',Georgia,serif;
       --fb:'DM Sans',system-ui,sans-serif;
-      --m:#9b6b82;--md:#6b3d55;--mp:#3d1f30;--cr:#fdf8fa;
+       --m:  #D04867;
+  --md: #E0255B;
+  --mp: #3D1F30;
+  --cr: #FFF8FA;
     }
     html,body{width:100%;height:100%;font-family:var(--fb);
-      background:linear-gradient(135deg,#f9eff3 0%,#e8d0da 50%,#d4b0c0 100%);
+       background: linear-gradient(
+    135deg,
+    #FFF8FA 0%,
+    #FBE7ED 50%,
+    #EDB0BA 100%
+  );
       min-height:100dvh;overflow:hidden}
 
     /* SCREENS */
@@ -377,13 +385,13 @@ winKnop: 'Follow from start',
 
   // ── Kleuren ────────────────────────────────────────────────────────────────
   // Verander hex-kleuren om de stijl aan te passen
-  kleuren: {
-    achtergrondLinks:   '#f2dce6',   // lichte roze (linksboven)
-    achtergrondRechts:  '#d4a8be',   // donkere mauve (rechtsonder)
-   slangKop:           '#6b3d55',
-slangLijf:          '#8a5570',
-slangStaart:        '#bfa0ad',
-  },
+kleuren: {
+  achtergrondLinks:  '#FBE7ED',
+  achtergrondRechts: '#EDB0BA',
+  slangKop:           '#E0255B',
+  slangLijf:          '#D04867',
+  slangStaart:        '#ED7CA1',
+},
 
   // ── Power-ups ──────────────────────────────────────────────────────────────
   // dur = aantal ticks dat het effect duurt (1 tick ≈ 90-150ms afhankelijk van level)
