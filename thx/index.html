@@ -1146,7 +1146,9 @@ c.font = `italic 500 19px "Cormorant Garamond", Georgia, serif`;
 
         const x = marginX + col * charW - frac * charW;
 
-        c.fillText(ch, x, y);
+const lauraLength = [...displayName('♥LAURA♥')].length;
+c.fillStyle = charIndex < lauraLength ? '#E0255B' : '#6b3d55';
+c.fillText(ch, x, y);
       }
     }
 
